@@ -1,0 +1,3 @@
+No findings at or above severity LOW
+
+Scanned 1 file(s). Run with --explain for limitations / false-positive notes.
