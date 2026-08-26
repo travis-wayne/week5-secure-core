@@ -1,0 +1,10 @@
+training-fixtures/vulnerable.js:4  [MEDIUM] SECRET-GENERIC-001     Variable 'API_KEY' is assigned a quoted literal that looks like a secret/key/token rather than an env-var reference.
+        > const DEMO_API_KEY = "TRAINING_ONLY_NOT_A_REAL_SECRET";
+training-fixtures/vulnerable.js:7  [MEDIUM] ROUTE-NOVALIDATE-001   Route handler reads request input (body/query/params/headers) but no validation call (zod/joi/yup/express-validator/ajv/manual if-guard) was found within 15 lines of the handler start. May be validated by shared middleware not visible here.
+        > const term = req.query.q;
+training-fixtures/vulnerable.js:9  [HIGH  ] SQL-TEMPLATE-001       SQL query built with a template-literal interpolation (`${...}`)
+        > const query = `SELECT id, name FROM products WHERE name LIKE '%${term}%'`;
+
+Summary: 1 HIGH, 2 MEDIUM, 0 LOW across 1 file(s)
+
+Scanned 1 file(s). Run with --explain for limitations / false-positive notes.
