@@ -1,3 +1,16 @@
-No findings at or above severity LOW
+./training-fixtures/jwt-weak.js:3  [HIGH  ] JWT001                 Variable matching a JWT-secret naming pattern is assigned a quoted literal rather than an env-var reference. If this value is later passed to jwt.sign()/jwt.verify(), it's a hardcoded signing secret.
+        > const JWT_SECRET = "supersecret";
+./training-fixtures/missed.js:4  [MEDIUM] ROUTE-NOVALIDATE-001   Route handler reads request input (body/query/params/headers) but no validation call (zod/joi/yup/express-validator/ajv/manual if-guard) was found within 15 lines of the handler start. May be validated by shared middleware not visible here.
+        > const command = req.query.command;
+./training-fixtures/missed.js:6  [HIGH  ] EXEC001                Dangerous exec()/eval()-family call with request-derived input (read at line 4) within 8 lines. This does not prove the executed string is built from that input -- no data-flow analysis is performed -- but the proximity warrants manual review for command/code injection.
+        > exec(command, (error, stdout) => {
+./training-fixtures/vulnerable.js:4  [MEDIUM] SECRET-GENERIC-001     Variable 'API_KEY' is assigned a quoted literal that looks like a secret/key/token rather than an env-var reference.
+        > const DEMO_API_KEY = "TRAINING_ONLY_NOT_A_REAL_SECRET";
+./training-fixtures/vulnerable.js:7  [MEDIUM] ROUTE-NOVALIDATE-001   Route handler reads request input (body/query/params/headers) but no validation call (zod/joi/yup/express-validator/ajv/manual if-guard) was found within 15 lines of the handler start. May be validated by shared middleware not visible here.
+        > const term = req.query.q;
+./training-fixtures/vulnerable.js:9  [HIGH  ] SQL-TEMPLATE-001       SQL query built with a template-literal interpolation (`${...}`)
+        > const query = `SELECT id, name FROM products WHERE name LIKE '%${term}%'`;
 
-Scanned 1 file(s). Run with --explain for limitations / false-positive notes.
+Summary: 3 HIGH, 3 MEDIUM, 0 LOW across 3 file(s)
+
+Scanned 4 file(s). Run with --explain for limitations / false-positive notes.
