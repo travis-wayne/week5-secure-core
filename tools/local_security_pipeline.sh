@@ -1,41 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -o pipefail
+set -uo pipefail
+
+TARGET="${1:-.}"
 
 echo "========================================"
-echo "      LOCAL SECURITY PIPELINE"
+echo "       LOCAL SECURITY PIPELINE"
 echo "========================================"
+echo
+echo "Target: $TARGET"
+echo
 
-mkdir -p artifacts
-
-echo ""
 echo "[1/2] Running vulnerability scanner..."
+echo
 
-python3 tools/vulnerability_scanner.py . \
-  | tee artifacts/local-security-findings.txt
+python3 tools/vulnerability_scanner.py "$TARGET"
 
-SCAN_EXIT_CODE=${PIPESTATUS[0]}
+SCAN_EXIT=$?
 
-echo ""
+echo
 echo "[2/2] Evaluating security result..."
+echo
 
-if [ "$SCAN_EXIT_CODE" -eq 1 ]; then
-    echo ""
+if [ "$SCAN_EXIT" -eq 1 ]; then
     echo "SECURITY GATE: FAILED"
-    echo "HIGH-severity finding detected."
-    echo "Pipeline blocked."
+    echo "A HIGH-severity finding was detected."
     exit 1
-fi
-
-if [ "$SCAN_EXIT_CODE" -eq 0 ]; then
-    echo ""
+elif [ "$SCAN_EXIT" -eq 0 ]; then
     echo "SECURITY GATE: PASSED"
-    echo "No HIGH-severity finding detected."
-    echo "Pipeline may proceed."
+    echo "No HIGH-severity finding was detected."
     exit 0
+else
+    echo "SECURITY GATE: ERROR"
+    echo "The scanner did not complete normally."
+    exit 2
 fi
-
-echo ""
-echo "SECURITY GATE: ERROR"
-echo "Scanner returned unexpected exit code: $SCAN_EXIT_CODE"
-exit "$SCAN_EXIT_CODE"
